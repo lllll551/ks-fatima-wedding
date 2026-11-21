@@ -388,9 +388,9 @@ function hearts(){
 function build(){
   var h=['<div class="slide" data-dur="6800"><div class="sub gold" style="letter-spacing:5px;font-weight:700">WITH LOVE FROM KS ACADEMY</div><div class="rule"></div><div class="script gold" style="font-size:34px">Congratulations</div><div class="script gold hero">Fatima</div><div class="sub">on your beautiful wedding</div><div style="font-size:32px;margin-top:8px">💍 ✨</div><div id="cd" class="cd"></div></div>'];
   var mp=MEMBERS.filter(function(m){return m.role&&m.photo});
-  if(mp.length)h.push('<div class="slide" data-dur="7000"><div class="sub gold" style="letter-spacing:5px;font-weight:700">AT KS ACADEMY</div><div class="script gold" style="font-size:46px;line-height:1.1">Your Mentors</div><div class="rule"></div><div class="mpair">'+mp.map(function(m){return '<div><i><img src="'+esc(m.photo)+'" alt=""></i><b>'+esc(m.name)+'</b></div>'}).join('')+'</div><div class="sub">Guiding you with love, every step of the way</div></div>');
+  if(mp.length)h.push('<div class="slide" data-dur="6000"><div class="sub gold" style="letter-spacing:5px;font-weight:700">AT KS ACADEMY</div><div class="script gold" style="font-size:46px;line-height:1.1">Your Mentors</div><div class="rule"></div><div class="mpair">'+mp.map(function(m){return '<div><i><img src="'+esc(m.photo)+'" alt=""></i><b>'+esc(m.name)+'</b></div>'}).join('')+'</div><div class="sub">Guiding you with love, every step of the way</div></div>');
   MEMBERS.forEach(function(m,i){
-    h.push('<div class="slide v'+(i%3)+(m.role?' mentor':'')+'" data-dur="'+7000+'"><div class="row"><div class="ringwrap"><div class="pol"><div class="tape"></div><span class="stk s1">👑</span><span class="rb">'+(m.role?'MENTOR ★':'MUBARAK')+'</span>'+ph(m)+'<div class="tag"><b'+(m.name.length>16?' style="font-size:13px"':'')+'>'+esc(m.name)+'</b>'+(m.role?'<span>'+esc(m.role)+'</span>':'')+'</div></div></div><div class="txt shotbox">'+shot(i)+'</div></div></div>');
+    h.push('<div class="slide v'+(i%3)+(m.role?' mentor':'')+'" data-dur="'+6000+'"><div class="row"><div class="ringwrap"><div class="pol"><div class="tape"></div><span class="stk s1">👑</span><span class="rb">'+(m.role?'MENTOR ★':'MUBARAK')+'</span>'+ph(m)+'<div class="tag"><b'+(m.name.length>16?' style="font-size:13px"':'')+'>'+esc(m.name)+'</b>'+(m.role?'<span>'+esc(m.role)+'</span>':'')+'</div></div></div><div class="txt shotbox">'+shot(i)+'</div></div></div>');
   });
   var pos=[[2,0,-8],[36,4,5],[68,0,-4],[10,50,6],[40,52,-6],[69,48,4],[24,26,-2],[54,28,3]];
   var c=MEMBERS.map(function(m,i){return '<div style="animation-delay:'+(.12*i)+'s"><i>'+(m.photo?'<img src="'+esc(m.photo)+'" alt="">':AV(m))+'</i>'+esc(m.name.replace(/ Official| Student/,''))+'</div>'}).join('');
@@ -424,7 +424,7 @@ function go(n){
   Array.prototype.forEach.call(slides,function(s,i){if(i!==n)s.classList.remove('on');else{void s.offsetWidth;s.classList.add('on')}});
   Array.prototype.forEach.call(dotsEl.children,function(d,i){d.classList.toggle('on',i===n)});
   var d=typeIn(slides[n]);
-  emoji(n===slides.length-1?8:0);petals(n===slides.length-1?10:0);clearTimeout(restartT);if(n===slides.length-1)restartT=setTimeout(tryRestart,RESTART_AFTER);var pc=Math.round(n/(slides.length-1)*100);document.getElementById('mbar').style.width=pc+'%';document.getElementById('mtxt').textContent=n===slides.length-1?'100% BLESSINGS 💛':'BLESSINGS '+pc+'%';var nm=slides[n].querySelector('.to,.hero');if(nm)sparkAt(nm,14);
+  emoji(n===slides.length-1?8:0);petals(n===slides.length-1?10:0);clearTimeout(restartT);var pc=Math.round(n/(slides.length-1)*100);document.getElementById('mbar').style.width=pc+'%';document.getElementById('mtxt').textContent=n===slides.length-1?'100% BLESSINGS 💛':'BLESSINGS '+pc+'%';var nm=slides[n].querySelector('.to,.hero');if(nm)sparkAt(nm,14);
   fire(n===0||n===slides.length-1?5:2);
   if(started&&!paused&&n<slides.length-1)nextT=setTimeout(function(){go(cur+1)},slides[n].dataset.dur?+slides[n].dataset.dur:Math.max(d,1800)+3200);
 }
@@ -486,7 +486,7 @@ function music(on){
   musicOn=on;var b=document.getElementById('mute');b.style.display='block';b.innerHTML=on?'&#9835;':'&#128263;';
   try{
     if(SONG){
-      if(!audioEl){audioEl=new Audio(SONG);audioEl.loop=true;if(/^data:/.test(SONG))try{var C2=window.AudioContext||window.webkitAudioContext,a2=new C2(),src=a2.createMediaElementSource(audioEl),an=a2.createAnalyser();an.fftSize=256;src.connect(an);an.connect(a2.destination);var bins=new Uint8Array(an.frequencyBinCount),last=0;(function lp(){an.getByteFrequencyData(bins);var e=(bins[1]+bins[2]+bins[3]+bins[4])/4;if(e>190&&e>last+12)pulse();last=e;requestAnimationFrame(lp)})()}catch(x){}}
+      if(!audioEl){audioEl=new Audio(SONG);audioEl.loop=false;audioEl.addEventListener("timeupdate",function(){var r=audioEl.duration-audioEl.currentTime;if(r<4)audioEl.volume=Math.max(0,r/4)});if(/^data:/.test(SONG))try{var C2=window.AudioContext||window.webkitAudioContext,a2=new C2(),src=a2.createMediaElementSource(audioEl),an=a2.createAnalyser();an.fftSize=256;src.connect(an);an.connect(a2.destination);var bins=new Uint8Array(an.frequencyBinCount),last=0;(function lp(){an.getByteFrequencyData(bins);var e=(bins[1]+bins[2]+bins[3]+bins[4])/4;if(e>190&&e>last+12)pulse();last=e;requestAnimationFrame(lp)})()}catch(x){}}
       if(on)audioEl.play();else audioEl.pause();return;
     }
     if(on){
